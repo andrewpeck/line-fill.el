@@ -69,6 +69,20 @@
     (line-fill-paragraph)
     (should (equal (buffer-string) "Wow it works!\nGreat news."))))
 
+(ert-deftest lfp-test-no-break-after-abbreviation ()
+  "Sentences containing e.g. are not split at the abbreviation."
+  (lfp-with-buffer "Rodents are mammals. All rodents have continuously growing incisors. Many species are kept as pets, e.g. guinea pigs and hamsters, which are popular due to their docile nature (and we e.g. often see them in schools and homes)."
+    (line-fill-paragraph)
+    (should (equal (buffer-string)
+                   "Rodents are mammals.\nAll rodents have continuously growing incisors.\nMany species are kept as pets, e.g. guinea pigs and hamsters, which are popular due to their docile nature (and we e.g. often see them in schools and homes)."))))
+
+(ert-deftest lfp-test-no-break-after-paren-exclamation ()
+  "Sentences are not split after ! or ? inside parentheses."
+  (lfp-with-buffer "Beavers are the largest rodents in North America. Their dams can raise water levels by a surprising amount (or more!) than most people expect."
+    (line-fill-paragraph)
+    (should (equal (buffer-string)
+                   "Beavers are the largest rodents in North America.\nTheir dams can raise water levels by a surprising amount (or more!) than most people expect."))))
+
 (ert-deftest lfp-test-prefix-arg-calls-fill-paragraph ()
   "When called with a prefix argument, `fill-paragraph' is invoked instead."
   (lfp-with-buffer "First sentence. Second sentence."
