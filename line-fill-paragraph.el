@@ -35,8 +35,8 @@
 
 ;;;###autoload
 (defun line-fill-paragraph (&optional P)
-  "When called with prefix argument call `fill-paragraph'.
-   Otherwise split the current paragraph into one sentence per line."
+  "When called with prefix argument P call `fill-paragraph'.
+Otherwise split the current paragraph into one sentence per line."
   (interactive "P")
   (if (not P)
       (let ((regexp (concat "\s+\\(" (string-join line-fill-paragraph-non-separators "\\|") "\\)\\.")))
