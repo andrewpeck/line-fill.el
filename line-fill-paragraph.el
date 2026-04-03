@@ -33,6 +33,20 @@
    ;; single letter initials such as A. B. C.
    (mapcar (lambda (x) (concat (upcase (char-to-string x)) ".")) (number-sequence ?a ?z))))
 
+(defsubst line-fill-paragraph--abbrev-regexp ()
+  "Generate a regular expression for non-separator strings.
+
+Matches one or more spaces followed by any of the specified
+non-separator strings.
+
+Returns a concatenated regular expression string for use in line
+filling."
+  (concat "\\s-+\\("
+          (string-join
+           (mapcar #'regexp-quote line-fill-paragraph-non-separators)
+           "\\|")
+          "\\)"))
+
 ;;;###autoload
 (defun line-fill-paragraph (&optional P)
   "When called with prefix argument P call `fill-paragraph'.
@@ -40,10 +54,7 @@ Otherwise split the current paragraph into one sentence per line."
   (interactive "P")
   ;; ordinary fill paragraph when prefix arg is set
   (if P (fill-paragraph P)
-    (let ((abbrev-regexp
-           (concat "\\s-+\\("
-                   (string-join (mapcar #'regexp-quote line-fill-paragraph-non-separators) "\\|")
-                   "\\)"))
+    (let ((abbrev-regexp (line-fill-paragraph--abbrev-regexp))
           (paren-end-regexp "[!?][\"')]+\\'"))
       (save-excursion
         (let ((fill-column 12345678)) ;; relies on dynamic binding
