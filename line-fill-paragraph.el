@@ -68,7 +68,7 @@
                   (just-one-space) ;; leaves only one space, point is after it
                   (delete-char -1) ;; delete the space
                   (newline)        ;; and insert a newline
-                  (evil-indent-line (line-beginning-position) (line-end-position))))))))
+                  (indent-region (line-beginning-position) (line-end-position))))))))
 
     ;; otherwise do ordinary fill paragraph
     (fill-paragraph P)))
