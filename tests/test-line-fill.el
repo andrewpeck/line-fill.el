@@ -11,6 +11,8 @@
 
 (require 'ert)
 
+(defvar lfp-test-dir (file-name-directory (or load-file-name buffer-file-name)))
+
 (setq sentence-end-double-space nil)
 
 (require 'line-fill)
@@ -99,6 +101,18 @@
     (goto-char (point-min))
     (line-fill)
     (should (= (point) (point-min)))))
+
+(ert-deftest lfp-test-buffer-unchanged ()
+  "Running `line-fill-buffer' on line-fill-buffer.tex leaves it unchanged."
+  (let* ((file (expand-file-name "line-fill-buffer.tex" lfp-test-dir))
+         (original (with-temp-buffer
+                     (insert-file-contents file)
+                     (buffer-string))))
+    (with-temp-buffer
+      (insert original)
+      (goto-char (point-min))
+      (line-fill-buffer)
+      (should (equal (buffer-string) original)))))
 
 (provide 'line-fill-test)
 ;;; tests/line-fill-test.el ends here
