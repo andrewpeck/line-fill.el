@@ -1,12 +1,12 @@
-;;; line-fill-paragraph.el --- Functions for working with verilog files -*- lexical-binding: t; -*-
+;;; line-fill.el --- Functions for semantic line fill -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (C) 2023-2026 Andrew Peck
 
 ;; Author: Andrew Peck <peckandrew@gmail.com>
-;; URL: https://github.com/andrewpeck/line-fill-paragraph
+;; URL: https://github.com/andrewpeck/line-fill.el
 ;; Version: 0.0.1
 ;; Package-Requires: ((emacs "29.1"))
-;; Keywords: writing
+;; Keywords: text writing
 
 ;; This file is not part of GNU Emacs.
 ;;
@@ -27,13 +27,13 @@
 ;;
 ;;; Code:
 
-(defvar line-fill-paragraph-non-separators
+(defvar line-fill-non-separators
   (append
    (list "n.b." "i.e." "e.g." "c.f." "viz." "eg." "ie.")
    ;; single letter initials such as A. B. C.
    (mapcar (lambda (x) (concat (upcase (char-to-string x)) ".")) (number-sequence ?a ?z))))
 
-(defsubst line-fill-paragraph--abbrev-regexp ()
+(defsubst line-fill--abbrev-regexp ()
   "Generate a regular expression for non-separator strings.
 
 Matches one or more spaces followed by any of the specified
@@ -43,12 +43,24 @@ Returns a concatenated regular expression string for use in line
 filling."
   (concat "\\s-+\\("
           (string-join
-           (mapcar #'regexp-quote line-fill-paragraph-non-separators)
+           (mapcar #'regexp-quote line-fill-non-separators)
            "\\|")
           "\\)"))
 
 ;;;###autoload
-(defun line-fill-paragraph (&optional P)
+(defun line-fill-buffer (&optional P)
+  "Fill every paragraph in the buffer with one sentence per line.
+
+When called with prefix argument P, call `fill-paragraph' on each paragraph."
+  (interactive "P")
+  (save-excursion
+    (goto-char (point-min))
+    (while (not (eobp))
+      (line-fill P)
+      (forward-paragraph 1))))
+
+;;;###autoload
+(defun line-fill (&optional P)
   "Fill paragraph with one sentence per line.
 
 When called with prefix argument P call `fill-paragraph'.
@@ -56,7 +68,7 @@ Otherwise split the current paragraph into one sentence per line."
   (interactive "P")
   ;; ordinary fill paragraph when prefix arg is set
   (if P (fill-paragraph P)
-    (let ((abbrev-regexp (line-fill-paragraph--abbrev-regexp))
+    (let ((abbrev-regexp (line-fill--abbrev-regexp))
           (paren-end-regexp "[!?][\"')]+\\'"))
       (save-excursion
         (let ((fill-column 12345678)) ;; relies on dynamic binding
@@ -68,14 +80,14 @@ Otherwise split the current paragraph into one sentence per line."
                        (backward-sentence)
                        (point-marker)))) ;; remember where to stop
             (beginning-of-line)
-            (catch 'line-fill-paragraph-done
+            (catch 'line-fill-done
               (while t
                 ;; advance one sentence; exit cleanly at end of buffer or past end
                 (condition-case nil
                     (forward-sentence)
-                  (end-of-buffer (throw 'line-fill-paragraph-done nil)))
+                  (end-of-buffer (throw 'line-fill-done nil)))
                 (when (> (point) (marker-position end))
-                  (throw 'line-fill-paragraph-done nil))
+                  (throw 'line-fill-done nil))
                 ;; skip over abbreviations (e.g., i.e.) and punct inside parens (or more!)
                 (let ((skipped nil)
                       (s (point))
@@ -90,14 +102,14 @@ Otherwise split the current paragraph into one sentence per line."
                         (setq skipped t)
                         (condition-case nil
                             (forward-sentence)
-                          (end-of-buffer (throw 'line-fill-paragraph-done nil)))
+                          (end-of-buffer (throw 'line-fill-done nil)))
                         (when (> (point) (marker-position end))
-                          (throw 'line-fill-paragraph-done nil)))))
+                          (throw 'line-fill-done nil)))))
                   (unless skipped
                     (just-one-space) ;; leaves only one space, point is after it
                     (delete-char -1) ;; delete the space
                     (newline)        ;; and insert a newline
                     (indent-region (line-beginning-position) (line-end-position))))))))))))
 
-(provide 'line-fill-paragraph)
-;;; line-fill-paragraph.el ends here
+(provide 'line-fill)
+;;; line-fill.el ends here

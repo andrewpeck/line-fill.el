@@ -1,13 +1,13 @@
-* line-fill-paragraph
+* line-fill
 
 An Emacs package that splits a paragraph into one sentence per line.
 
 ** Usage
 
-Bind ~line-fill-paragraph~ to a key, e.g.:
+Bind ~line-fill~ to a key, e.g.:
 
 #+begin_src emacs-lisp
-(global-set-key (kbd "M-q") #'line-fill-paragraph)
+(global-set-key (kbd "M-q") #'line-fill)
 #+end_src
 
 - Called normally :: splits the paragraph at point into one sentence per line.
@@ -21,7 +21,7 @@ Before:
 The capybara is the largest living rodent. It is native to South America. Capybaras are highly social animals.
 #+end_example
 
-After ~M-x line-fill-paragraph~:
+After ~M-x line-fill~:
 
 #+begin_example
 The capybara is the largest living rodent.
@@ -37,13 +37,13 @@ after ~!~ or ~?~ that appear inside parentheses (e.g. "faster (or more!) than
 expected").
 
 The list of non-breaking abbreviations is controlled by the variable
-~line-fill-paragraph-non-separators~.
+~line-fill-non-separators~.
 
 ** Installation
 
 With ~use-package~ and a local checkout:
 
 #+begin_src emacs-lisp
-(use-package line-fill-paragraph
-  :load-path "path/to/line-fill-paragraph")
+(use-package line-fill
+  :load-path "path/to/line-fill")
 #+end_src
