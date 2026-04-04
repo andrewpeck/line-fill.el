@@ -1,17 +1,21 @@
-* line-fill
+* line-fill.el
 
 An Emacs package that splits a paragraph into one sentence per line.
 
 ** Usage
 
-Bind ~line-fill~ to a key, e.g.:
+Bind ~line-fill-paragraph~ to a key, e.g.:
 
 #+begin_src emacs-lisp
-(global-set-key (kbd "M-q") #'line-fill)
+(global-set-key (kbd "M-q") #'line-fill-paragraph)
 #+end_src
 
 - Called normally :: splits the paragraph at point into one sentence per line.
 - Called with a prefix argument (~C-u M-q~) :: falls back to the standard ~fill-paragraph~.
+
+There is also ~line-fill-buffer~, which will step through the buffer and fill all paragraphs.
+
+~line-fill-buffer~ is tested on some LaTeX documents but not very thoroughly---please check its output.
 
 ** Example
 
@@ -38,12 +42,3 @@ expected").
 
 The list of non-breaking abbreviations is controlled by the variable
 ~line-fill-non-separators~.
-
-** Installation
-
-With ~use-package~ and a local checkout:
-
-#+begin_src emacs-lisp
-(use-package line-fill
-  :load-path "path/to/line-fill")
-#+end_src
