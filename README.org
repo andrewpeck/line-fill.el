@@ -10,6 +10,12 @@ Bind ~line-fill-paragraph~ to a key, e.g.:
 (global-set-key (kbd "M-q") #'line-fill-paragraph)
 #+end_src
 
+or e.g.
+
+#+begin_src emacs-lisp
+(define-key LaTeX-mode-map (kbd "M-q") #'line-fill-paragraph)
+#+end_src
+
 - Called normally :: splits the paragraph at point into one sentence per line.
 - Called with a prefix argument (~C-u M-q~) :: falls back to the standard ~fill-paragraph~.
 
