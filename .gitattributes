@@ -1,2 +1,3 @@
 makem.sh linguist-vendored
 Makefile linguist-vendored
+tests/line-fill-buffer.tex linguist-vendored
