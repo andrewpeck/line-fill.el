@@ -49,7 +49,9 @@ filling."
 
 ;;;###autoload
 (defun line-fill-paragraph (&optional P)
-  "When called with prefix argument P call `fill-paragraph'.
+  "Fill paragraph with one sentence per line.
+
+When called with prefix argument P call `fill-paragraph'.
 Otherwise split the current paragraph into one sentence per line."
   (interactive "P")
   ;; ordinary fill paragraph when prefix arg is set
