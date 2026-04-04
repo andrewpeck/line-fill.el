@@ -25,6 +25,11 @@
 
 ;;; Commentary:
 ;;
+;; Provides `line-fill' and `line-fill-buffer', which reformat prose so that
+;; each sentence occupies its own line. Useful e.g. in LaTeX documents or other
+;; version controlled prose, since a change to one sentence produces a minimal
+;; diff rather than reflowing an entire paragraph.
+;;
 ;;; Code:
 
 (defvar line-fill-non-separators
