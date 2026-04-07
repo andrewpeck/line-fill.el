@@ -61,11 +61,11 @@ When called with prefix argument P, call `fill-paragraph' on each paragraph."
   (save-excursion
     (goto-char (point-min))
     (while (not (eobp))
-      (line-fill P)
+      (line-fill-paragraph P)
       (forward-paragraph 1))))
 
 ;;;###autoload
-(defun line-fill (&optional P)
+(defun line-fill-paragraph (&optional P)
   "Fill paragraph with one sentence per line.
 
 When called with prefix argument P call `fill-paragraph'.
